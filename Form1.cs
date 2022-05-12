@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Simulation.Lab._10
 {
     public partial class Form1 : Form
     {
-        string[] teams = new string[8] {"RUS", "ARG", "ESP", "GER", "ENG", "POR", "FRA", "WAL"};
+        string[] teams = new string[8] { "RUS", "ARG", "ESP", "GER", "ENG", "POR", "FRA", "WAL" };
         int[] teams_id = new int[8] { 0, 1, 2, 3, 4, 5, 6, 7 };
         float[] team_lambda = new float[8];
         int[,] team_matches = new int[8, 8];
         int rounds = 1;
+
+        Dictionary<string, Dictionary<string, int>> team_stat_name = new Dictionary<string, Dictionary<string, int>>();
 
         public Form1()
         {
@@ -41,10 +40,10 @@ namespace Simulation.Lab._10
                 if (teams_temp[i] == 0)
                     for (int j = 0; j < 8; j++)
                     {
-                        if (team_matches[i,j] != 1 && teams_temp[j] == 0)
+                        if (team_matches[i, j] != 1 && teams_temp[j] == 0)
                         {
                             teams_id_next[k] = i;
-                            teams_id_next[k+1] = j;
+                            teams_id_next[k + 1] = j;
                             k += 2;
 
                             team_matches[i, j] = 1;
@@ -70,18 +69,21 @@ namespace Simulation.Lab._10
             Random rnd = new Random();
             for (int i = 0; i < teams.Length; i++)
             {
-                team_lambda[i] = (float)rnd.Next(201) / 100;
+                team_lambda[i] = (float)rnd.Next(1001) / 100;
                 grid_team_lambda.Rows.Add(teams[i], team_lambda[i]);
             }
         }
 
         private void btn_next_round_Click(object sender, EventArgs e)
         {
+            grid_team_points.ClearSelection();
+            grid_team_lambda.ClearSelection();
+            grid_match_results.ClearSelection();
             if (btn_reset.Enabled == false) btn_reset.Enabled = true;
             for (int i = 0; i < teams.Length; i++)
                 for (int j = 0; j < teams.Length; j++)
                     grid_match_results[i, j].Style.BackColor = Color.White;
-                    
+
             lbl_rounds.Text = $"Round: {rounds}/14";
 
             Random rnd = new Random();
@@ -92,37 +94,76 @@ namespace Simulation.Lab._10
             {
                 int a = next_round[i];
                 int b = next_round[i + 1];
-                // match(next_round[i], next_round[i + 1]);
-                int goals_a = rnd.Next(10);
-                int goals_b = rnd.Next(10);
+                int goals_a = match(team_lambda[a]);
+                int goals_b = match(team_lambda[b]);
 
-                grid_match_results[a, b].Value = $"{goals_a} - {goals_b}";
-                grid_match_results[a, b].Style.BackColor = Color.Green;
+                if (goals_a == goals_b)
+                {
+                    team_stat_name[teams[a]]["point"] += 1;
+                    team_stat_name[teams[a]]["draw"] += 1;
+                    team_stat_name[teams[b]]["point"] += 1;
+                    team_stat_name[teams[b]]["draw"] += 1;
+                }
+                else if (goals_a > goals_b)
+                {
+                    team_stat_name[teams[a]]["point"] += 3;
+                    team_stat_name[teams[a]]["win"] += 1;
+                    team_stat_name[teams[b]]["lose"] += 1;
+                }
+                else
+                {
+                    team_stat_name[teams[a]]["lose"] += 1;
+                    team_stat_name[teams[b]]["point"] += 3;
+                    team_stat_name[teams[b]]["win"] += 1;
+                }
+
+                grid_match_results[b, a].Value = $"{goals_a} - {goals_b}";
+                grid_match_results[b, a].Style.BackColor = Color.Green;
             }
 
-            if (rounds == 14) btn_next_round.Enabled = false;
+            sort_dictionary();
+
+            grid_team_points.Rows.Clear();
+
+            foreach (var team in team_stat_name)
+            {
+                grid_team_points.Rows.Add(team.Key, team.Value["point"], team.Value["win"], team.Value["draw"], team.Value["lose"]);
+            }
+
+            if (rounds == 14)
+            {
+                btn_next_round.Enabled = false;
+                grid_team_points.Rows[7].DefaultCellStyle.BackColor = Color.Gold;
+                grid_team_points.Rows[6].DefaultCellStyle.BackColor = Color.Silver;
+                grid_team_points.Rows[5].DefaultCellStyle.BackColor = Color.Peru;
+            }
             rounds += 1;
+            grid_team_points.ClearSelection();
+            grid_team_lambda.ClearSelection();
+            grid_match_results.ClearSelection();
         }
 
-        private void match(int a, int b)
+        private int match(double lambda)
         {
+            int x = 0;
+            double sum = 0;
             Random rnd = new Random();
 
-            int goals_a = rnd.Next(10);
-            int goals_b = rnd.Next(10);
+            while (sum > -lambda)
+            {
+                sum += Math.Log(rnd.NextDouble());
+                x++;
+            }
+            x -= 1;
 
-            grid_match_results[a, b].Value = $"{goals_a} - {goals_b}";
-            grid_match_results[a, b].Style.BackColor = Color.Green;
-        }
-
-        private int get_goals()
-        {
-            Random rnd = new Random();
-            return rnd.Next(10);
+            return x;
         }
 
         private void btn_start_Click(object sender, EventArgs e)
         {
+            grid_team_points.ClearSelection();
+            grid_team_lambda.ClearSelection();
+            grid_match_results.ClearSelection();
             main_diagonale_setter();
             for (int i = 0; i < teams.Length; i++)
             {
@@ -140,11 +181,33 @@ namespace Simulation.Lab._10
                     if (i == j) grid_match_results[i, j].Value = "---";
 
             for (int i = 0; i < teams.Length; i++)
-                grid_team_points.Rows.Add(teams[i], "0", "0", "0", "0");
+            {
+                team_stat_name[teams[i]] = new Dictionary<string, int>()
+                {
+                    ["point"] = 0,
+                    ["win"] = 0,
+                    ["draw"] = 0,
+                    ["lose"] = 0
+                };
+            }
+
+            // Dictionary<string, int> team_stat_stat = 
+
+            foreach (var team in team_stat_name)
+            {
+                grid_team_points.Rows.Add(team.Key, team.Value["point"], team.Value["win"], team.Value["draw"], team.Value["lose"]);
+            }
+
+            //for (int i = 0; i < teams.Length; i++) grid_team_points.Rows.Add(teams[i], "0", "0", "0", "0");
 
             btn_start.Visible = false;
             btn_next_round.Visible = true;
             btn_rnd_teams.Enabled = false;
+        }
+
+        private void sort_dictionary()
+        {
+            team_stat_name = team_stat_name.OrderBy(pair => pair.Value["point"]).ToDictionary(pair => pair.Key, pair => pair.Value);
         }
 
         private void btn_reset_Click(object sender, EventArgs e)
