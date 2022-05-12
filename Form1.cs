@@ -84,15 +84,22 @@ namespace Simulation.Lab._10
             main_diagonale_setter();
             for (int i = 0; i < teams.Length; i++)
             {
-                grid_match_results.Columns.Add(new DataGridViewColumn { HeaderText = teams[i]});
+                grid_match_results.Columns.Add(new DataGridViewColumn { HeaderText = teams[i], CellTemplate = new DataGridViewTextBoxCell() });
             }
-            // grid_match_results.Rows.Add("", teams[0], teams[1], teams[2], teams[3], teams[4], teams[5], teams[6], teams[7]);
 
             for (int i = 0; i < teams.Length; i++)
             {
-                //grid_match_results.Rows.Add(" ", " ", " ", " ", " ", " ", " ", " ");
+                grid_match_results.Rows.Add();
                 grid_match_results.Rows[i].HeaderCell = new DataGridViewRowHeaderCell { Value = teams[i] };
             }
+
+            for (int i = 0; i < teams.Length; i++)
+                for (int j = 0; j < teams.Length; j++)
+                    if (i == j) grid_match_results[i, j].Value = "---";
+
+
+
+
 
             btn_start.Visible = false;
             btn_next_round.Visible = true;
