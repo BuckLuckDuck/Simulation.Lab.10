@@ -55,7 +55,7 @@
             this.btn_exit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_exit.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btn_exit.Location = new System.Drawing.Point(955, 414);
-            this.btn_exit.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btn_exit.Margin = new System.Windows.Forms.Padding(4);
             this.btn_exit.Name = "btn_exit";
             this.btn_exit.Size = new System.Drawing.Size(60, 55);
             this.btn_exit.TabIndex = 101;
@@ -72,7 +72,7 @@
             this.grid_match_results.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.grid_match_results.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.grid_match_results.Location = new System.Drawing.Point(24, 15);
-            this.grid_match_results.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.grid_match_results.Margin = new System.Windows.Forms.Padding(4);
             this.grid_match_results.Name = "grid_match_results";
             this.grid_match_results.ReadOnly = true;
             this.grid_match_results.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
@@ -91,7 +91,7 @@
             this.clmn_team,
             this.clmn});
             this.grid_team_lambda.Location = new System.Drawing.Point(1093, 15);
-            this.grid_team_lambda.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.grid_team_lambda.Margin = new System.Windows.Forms.Padding(4);
             this.grid_team_lambda.Name = "grid_team_lambda";
             this.grid_team_lambda.ReadOnly = true;
             this.grid_team_lambda.RowHeadersVisible = false;
@@ -128,7 +128,7 @@
             this.clmn_draw,
             this.clmn_lose});
             this.grid_team_points.Location = new System.Drawing.Point(613, 15);
-            this.grid_team_points.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.grid_team_points.Margin = new System.Windows.Forms.Padding(4);
             this.grid_team_points.Name = "grid_team_points";
             this.grid_team_points.ReadOnly = true;
             this.grid_team_points.RowHeadersVisible = false;
@@ -175,7 +175,7 @@
             // 
             this.btn_rnd_teams.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btn_rnd_teams.Location = new System.Drawing.Point(1093, 390);
-            this.btn_rnd_teams.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btn_rnd_teams.Margin = new System.Windows.Forms.Padding(4);
             this.btn_rnd_teams.Name = "btn_rnd_teams";
             this.btn_rnd_teams.Size = new System.Drawing.Size(240, 53);
             this.btn_rnd_teams.TabIndex = 105;
@@ -188,7 +188,7 @@
             this.btn_next_round.BackColor = System.Drawing.Color.DeepSkyBlue;
             this.btn_next_round.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btn_next_round.Location = new System.Drawing.Point(1094, 506);
-            this.btn_next_round.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btn_next_round.Margin = new System.Windows.Forms.Padding(4);
             this.btn_next_round.Name = "btn_next_round";
             this.btn_next_round.Size = new System.Drawing.Size(211, 71);
             this.btn_next_round.TabIndex = 106;
@@ -214,16 +214,18 @@
             this.btn_reset.Enabled = false;
             this.btn_reset.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btn_reset.Location = new System.Drawing.Point(972, 534);
-            this.btn_reset.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btn_reset.Margin = new System.Windows.Forms.Padding(4);
             this.btn_reset.Name = "btn_reset";
             this.btn_reset.Size = new System.Drawing.Size(113, 43);
             this.btn_reset.TabIndex = 108;
             this.btn_reset.Text = "Reset";
             this.btn_reset.UseVisualStyleBackColor = false;
+            this.btn_reset.Click += new System.EventHandler(this.btn_reset_Click);
             // 
             // btn_start
             // 
             this.btn_start.BackColor = System.Drawing.Color.DeepSkyBlue;
+            this.btn_start.Enabled = false;
             this.btn_start.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btn_start.Location = new System.Drawing.Point(1093, 507);
             this.btn_start.Margin = new System.Windows.Forms.Padding(4);
@@ -249,7 +251,7 @@
             this.Controls.Add(this.grid_match_results);
             this.Controls.Add(this.btn_exit);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
